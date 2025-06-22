@@ -1,13 +1,20 @@
-# Summer School  
+ 
 ## **Quantitative Phage–Bacteria Dynamics Across Scales**
 
 📍 **June 23–27, 2025**  
 📍 **University of Maryland, College Park**
 
+### 🧠 Scientific Committee Chair  
+- **Prof. Joshua Weitz (UMD)**
+- **Dr. Marian Dominguez-Mirazo (UMD)**
+
+### 🧪 Webpage maintained by
+**Raunak Dey (UMD)**
+
 ---
 
 **Phage transform the fate of cells, populations, and ecosystems.**  
-Building on the interdisciplinary OLife workshops in Paris (2022 & 2024), this summer school brings together researchers integrating models, experiments, and field data to explore the rich dynamics of phage–bacteria interactions across biological scales.
+Building on the interdisciplinary QLife workshops in Paris (2022 & 2024), this summer school brings together researchers integrating models, experiments, and field data to explore the rich dynamics of phage–bacteria interactions across biological scales.
 
 ---
 
@@ -44,11 +51,7 @@ Participants will:
 
 ---
 
-### 🧠 Scientific Committee Chair  
-**Joshua Weitz (UMD)**
 
-### 🧪 Computational Lab Lead  
-**Marian Dominguez-Mirazo (UMD)**
 
 ---
 

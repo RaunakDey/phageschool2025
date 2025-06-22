@@ -6,17 +6,35 @@ plugins:
   - search
   - mkdocs-jupyter
 
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+
+extra_css:
+  - css/arithmatex.css
+
+  
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+
 nav:
   - Home: index.md
-  - Day 1:
+  - Eco-Evo Principles Day 1:
       - Python: day1_eco_evo_principles/python_notebook_day1.ipynb
+      - Python: day1_eco_evo_principles/python_exercises_day1.ipynb
       #- R: day1/r.ipynb
-      #- MATLAB: day1/matlab.md
+      - MATLAB - Exercises: day1_eco_evo_principles/html/matlab_exercises_day1.html
   #- Day 2:
    #   - Python: day2/python.ipynb
    #   - R: day2/r.ipynb
    #   - MATLAB: day2/matlab.md
   #- Day 3:
-      - ...
+      # - ...
  # - Day 4:
-      - ...
+      # - ...
