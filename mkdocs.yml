@@ -1,0 +1,22 @@
+site_name: Phage School 2025
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocs-jupyter
+
+nav:
+  - Home: index.md
+  - Day 1:
+      - Python: day1_eco_evo_principles/python_notebook_day1.ipynb
+      #- R: day1/r.ipynb
+      #- MATLAB: day1/matlab.md
+  #- Day 2:
+   #   - Python: day2/python.ipynb
+   #   - R: day2/r.ipynb
+   #   - MATLAB: day2/matlab.md
+  #- Day 3:
+      - ...
+ # - Day 4:
+      - ...
