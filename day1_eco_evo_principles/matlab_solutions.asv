@@ -1,0 +1,204 @@
+# Matlab - Exercises
+
+
+##  SV lytic model
+### Simulate a viral invasion -
+
+Consider the SV model for lytic infections with susceptible cells (S) and free viruses (V) given by,
+\begin{align}
+\dot{S} &= bS (1- S/K) - \phi SV - dS 
+\end{align}
+\begin{align}
+\dot{V} &= \beta\phi SV - \phi SV - mV
+\end{align}
+
+use the following set of parameter values:
+
+$$ \phi = 6.7 \times 10^{-10} \ \mathrm{mL} \ \mathrm{h}^{-1} $$
+ $$  m = 1/24 h^{−1} $$
+  $$ d = 1/4 h^{−1}$$
+ $$ b = 0.95 h^{−1}$$
+$$ K = 7.5\times 10^7 \text{cell mL}^{−1}$$
+ $$ \beta = 50$$ virus/cell 
+
+
+### SV simulation
+
+Starting with the SV model, initiate an ‘inoculation’, adding $S0 = 10^4 $cell/mL of microbe, and
+then letting the population reach its equilibrium after approximately 24 h.
+
+Question: What population density does it reach? Is it what you expect? Compare your numerical simulation of S at the end of the simulation with the value of the equilibrium that you found analytically. Numerically, create a function describing the SV model and integrate it using python.
+
+Solution:
+This is the SV ODE
+```
+function dydt = SV_ode(t, y, pars)
+    % Standard SV model ODEs
+    S = y(1);
+    V = y(2);
+    phi = pars.phi;
+    m = pars.m;
+    d = pars.d;
+    b = pars.b;
+    K = pars.K;
+    beta = pars.beta;
+
+    dS = b*S*(1 - S/K) - phi*S*V - d*S;
+    dV = beta*phi*S*V - phi*S*V - m*V;
+
+    dydt = [dS; dV];
+end
+```
+simulate it with
+
+```matlab
+% Time settings
+t0 = 0;      % Initial time (hours)
+tf = 24;     % Final time (hours)
+T = linspace(t0, tf, 250);  % Time vector
+
+% Initial conditions
+y0 = [1e4; 0];  % [S0; V0] (V0 is 0 by default)
+
+% Parameters
+pars.phi = 6.7e-10;
+pars.m = 1/24;
+pars.d = 1/4;
+pars.b = 0.95;
+pars.K = 7.5e7;
+pars.beta = 50;
+
+% Solve ODE
+[T_out, Y] = ode45(@(t,y) SV_ode(t, y, pars), T, y0);
+
+% Extract S and compute equilibrium value
+S = Y(:,1);
+Seq_num = S(end);
+
+% Plotting
+figure;
+plot(T_out, S, 'k', 'LineWidth', 2); hold on;
+scatter(T_out(end), Seq_num, 80, 'red', 'filled');
+legend('S(t)', 'S^* numerically', 'Location', 'best', 'Box', 'on');
+xlabel('Time (h)');
+ylabel('S cells/mL');
+title('SV numerical integration');
+set(gca,'FontSize',20);
+grid on;
+
+% Save figure
+saveas(gcf, 'SV_model_plot.png');
+```
+to get the saved figure
+![Exponential growth](matlab_scripts/SV_model_plot.png)
+
+
+Analytically, we find that in the absence of virus in the system $(V0 = 0), \dot{V} = 0$ and the system remains disease-free. The SV system reduces to the logistic model with cell death, 
+$\dot{S} = bS(1- S/K) - dS$ Solving $\dot{S} = 0$ we find that S approaches the equilibrium point $S^∗ = K(1-d/b)$
+
+```matlab
+% Plotting
+figure;
+plot(T_out, S, 'k', 'LineWidth', 2); hold on;
+scatter(T_out(end), Seq_num, 80, 'red', 'filled');
+plot(T_out, Seq_ana * ones(size(T_out)), 'g--', 'LineWidth', 2);
+legend('S(t)', 'S^* numerically', 'S^* analytically', 'Location', 'best', 'Box', 'on');
+xlabel('Time (h)');
+ylabel('S cells/mL');
+title('SV numerical integration with equilibrium');
+set(gca,'FontSize',20);
+grid on;
+
+% Save figure
+saveas(gcf, 'SV_model_equilibrium_plot.png');
+```
+
+to get the saved figure
+![Equilibrium](matlab_scripts/SV_model_equilibrium_plot.png)
+
+
+### Finding out basic reproduction number
+
+Beginning from the disease-free equilibrium, add $V_0$ = 100 virus/mL and using β = 50 virus/cell for the burst size, estimate the basic reproduction number $R_0$.
+
+**Question:** What is the value of $R_0$ and what can you tell about the viral invasion? Simulate the dynamical system, do the viruses increase in abundance?
+
+**Answer:** The reproduction number is the number of newly infected induced by one infected in a
+fully susceptible population. It is a threshold value, that indicates if the virus is going to invade or
+being washed-out. When $R_0 > 1$ the virus has a positive growth rate and invade the population,
+when $R_0 <= 1$ the virus has negative or null population growth rate and is not able to invade.
+We want to find a condition for invasion, you can solve $\dot{V} > 0 (\text{ at } S∗)$ (disease free equilibrium) for
+a initial inoculation of virus V0:
+
+\begin{align}
+ \dot{V} &= \beta\phi S^* V_0 - \phi S^* V_0 -mV_0
+\end{align}
+
+
+\begin{align}
+  \beta\phi S^* > \phi S^* +m
+\end{align}
+
+The basic reproduction number of the system is $R_0 > \frac{\beta\phi S^* }{\beta\phi S^* +m}$ 
+
+
+```matlab
+% Analytical equilibrium
+Seq_ana = pars.K * (1 - pars.d / pars.b);
+
+% Compute R0
+R0 = (pars.beta * pars.phi * Seq_ana) / (pars.phi * Seq_ana + pars.m);
+fprintf('R0 = %.4f\n', R0);
+```
+
+R0 = 23.5258
+
+```matlab
+% Updated initial conditions (start from DFE + virus)
+y0 = [Seq_ana; 100];
+
+% Solve ODE
+[T_out, Y] = ode45(@(t,y) SV_ode(t, y, pars), T, y0);
+
+% Extract solutions
+S = Y(:,1);
+V = Y(:,2);
+
+% Plot semilog
+figure;
+semilogy(T_out, S, 'k', 'LineWidth', 2); hold on;
+semilogy(T_out, V, 'r', 'LineWidth', 2);
+scatter(0, Seq_ana, 80, 'red', 'filled', 'DisplayName', 'DFE');
+legend('S(t)', 'V(t)', 'DFE', 'Location', 'best', 'Box', 'on');
+xlabel('Time (h)');
+ylabel('Density (cells or viruses/mL)');
+title('SV numerical integration from DFE');
+grid on;
+
+% Save figure
+saveas(gcf, 'SV_model_DFE_plot.png');
+```
+saved figure
+![SV_model_DFE_plot](matlab_scripts/SV_model_DFE_plot.png)
+
+### Estimating growth rate of virus population 
+
+Estimate the growth rate of the virus population.
+**Question:** Does it agree with your theoretical expectations?
+**Answer:** Evaluate $$ \dot{V}|_{S= S^∗}$$. 
+
+\begin{align}
+1/V dV/dt = \beta\phi S^* - \phi S^* -m 
+\end{align}
+
+
+\begin{align}
+ r = \beta\phi S^* - \phi S^* -m
+\end{align}
+
+
+
+ $ S^{* $ by is expression and re-arranging:
+$ r = (\beta-1)\phi K (1-d/b) -m  $
+
+Numerically estimate the slope of log(V ) over time during the exponential growth phase and compare with the above equation for r with parameter values substituted.
