@@ -1,6 +1,7 @@
 site_name: Phage School 2025
 theme:
   name: material
+  favicon: favicon.ico  # ← Add this line
 
 plugins:
   - search
