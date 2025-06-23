@@ -5,11 +5,12 @@
 📍 **University of Maryland, College Park**
 
 ### 🧠 Scientific Committee Chair  
-- **Prof. Joshua Weitz (UMD)**
-- **Dr. Marian Dominguez-Mirazo (UMD)**
+- Prof. Joshua Weitz (UMD)
+- Dr. Marian Dominguez-Mirazo (UMD)
 
-### 🧪 Webpage maintained by
-**Raunak Dey (UMD)**
+### 🧪 Webpage and Solutions by:
+- Raunak Dey (UMD)
+- David Demory (Oceanography Observatory of Banyuls-sur-Mer)
 
 ---
 
