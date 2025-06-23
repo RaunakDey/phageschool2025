@@ -1,0 +1,111 @@
+% Define parameters
+pars.phi = 6.7e-10;
+pars.m = 1/24;
+pars.d = 1/4;
+pars.b = 0.95;
+pars.K = 5e6;
+pars.beta = 50;
+pars.eta = 0.5;
+
+% Disease-Free Equilibrium (DFE) of S
+S_DFE = pars.K * (1 - pars.d / pars.b);
+
+% Components of R0
+prod = pars.beta;
+proba_lyse = (pars.phi * S_DFE) / (pars.phi * S_DFE + pars.m);
+proba_inf = pars.eta / (pars.eta + pars.d);
+
+% Compute R0
+R0 = prod * proba_lyse * proba_inf;
+
+% Display
+fprintf('R0 = %.4f\n', R0);
+
+
+
+
+% Time
+t0 = 0;
+tf = 2000;
+T = linspace(t0, tf, 500);  % same as Python's linspace
+
+% Parameters
+pars.phi = 6.7e-10;
+pars.m = 1/24;
+pars.d = 1/4;
+pars.b = 0.95;
+pars.K = 5e6;
+pars.beta = 50;
+pars.eta = 0.5;
+
+% Disease-Free Equilibrium
+S_DFE = pars.K * (1 - pars.d / pars.b);
+
+% Initial Conditions [S, I, V]
+y0 = [S_DFE; 0; 100];
+
+% Solve the system
+[T_out, Y] = ode45(@(t, y) SIV_ode(t, y, pars), T, y0);
+S = Y(:, 1);
+I = Y(:, 2);
+V = Y(:, 3);
+
+% Plotting
+figure;
+semilogy(T_out, S + I, 'k', 'LineWidth', 2); hold on;
+semilogy(T_out, S, 'g', 'LineWidth', 2);
+semilogy(T_out, V, 'r', 'LineWidth', 2);
+scatter(0, S_DFE, 80, 'filled', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'red');
+
+legend('S + I', 'S', 'V', 'DFE', 'Location', 'best', 'Box', 'on');
+xlabel('Time (h)');
+ylabel('Density (cells or viruses/mL)');
+title('SIV model dynamics from DFE');
+grid on;
+set(gca,'FontSize',24);
+saveas(gcf, 'siv_dynamics.png');
+
+
+
+% Time
+t0 = 0;
+tf = 2000;
+T = linspace(t0, tf, 500);
+
+% Parameters (same as before, but beta changed)
+pars.phi = 6.7e-10;
+pars.m = 1/24;
+pars.d = 1/4;
+pars.b = 0.95;
+pars.K = 5e6;
+pars.beta = 10; % changed here
+pars.eta = 0.5;
+
+% Disease-Free Equilibrium
+S_DFE = pars.K * (1 - pars.d / pars.b);
+
+% Initial Conditions [S, I, V]
+y0 = [S_DFE; 0; 100];
+
+% Integrate system
+[T_out, Y] = ode45(@(t, y) SIV_ode(t, y, pars), T, y0);
+S = Y(:, 1);
+I = Y(:, 2);
+V = Y(:, 3);
+
+% Plotting
+figure;
+semilogy(T_out, S + I, 'k', 'LineWidth', 2); hold on;
+semilogy(T_out, S, 'g', 'LineWidth', 2);
+semilogy(T_out, V, 'r', 'LineWidth', 2);
+scatter(0, S_DFE, 80, 'filled', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'red');
+
+legend('S + I', 'S', 'V', 'DFE', 'Location', 'best', 'Box', 'on');
+xlabel('Time (h)');
+ylabel('Density (cells or viruses/mL)');
+title('SIV Model Dynamics (\beta = 10)');
+set(gca,'FontSize',24);
+grid on;
+saveas(gcf, 'siv_beta_variation.png');
+
+

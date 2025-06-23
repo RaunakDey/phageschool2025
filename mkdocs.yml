@@ -14,7 +14,7 @@ extra_javascript:
 extra_css:
   - css/arithmatex.css
 
-  
+
 markdown_extensions:
   - pymdownx.arithmatex:
       generic: true
@@ -26,10 +26,11 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Eco-Evo Principles Day 1:
-      - Python: day1_eco_evo_principles/python_notebook_day1.ipynb
+      #- Python: day1_eco_evo_principles/python_notebook_day1.ipynb
       - Python: day1_eco_evo_principles/python_exercises_day1.ipynb
       #- R: day1/r.ipynb
-      - MATLAB - Exercises: day1_eco_evo_principles/html/matlab_exercises_day1.html
+      # - MATLAB - Static: day1_eco_evo_principles/html/matlab_exercises_day1.html
+      - MATLAB - Exercises: day1_eco_evo_principles/matlab_solutions.md
   #- Day 2:
    #   - Python: day2/python.ipynb
    #   - R: day2/r.ipynb
